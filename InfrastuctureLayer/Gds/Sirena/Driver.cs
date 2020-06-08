@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Xml.Serialization;
+using InfrastuctureLayer.Models;
 
 namespace InfrastuctureLayer.Gds.Sirena
 {
@@ -25,6 +26,16 @@ namespace InfrastuctureLayer.Gds.Sirena
                   <Trip>
                     <Supplier>XX</Supplier>
                     <Fligth>20</Fligth>
+                    <variants>
+                      <variant>
+                        <segment operating_supplier='SU' marketing_supplier='S7'></segment>
+                        <segment operating_supplier='SU' marketing_supplier='S7'></segment>
+                      </variant>
+                      <variant>
+                        <segment operating_supplier='AA' marketing_supplier='BB'></segment>
+                        <segment operating_supplier='AA' marketing_supplier='BB'></segment>
+                      </variant>
+                    </variants>
                   </Trip>
                 </Trips>
             ";
@@ -33,7 +44,27 @@ namespace InfrastuctureLayer.Gds.Sirena
             var trips = new List<Models.TripModel>();
             foreach (var rawTrip in rawTrips.Trip)
             {
-                trips.Add(new Models.TripModel {Supplier = rawTrip.Supplier, Fligth = rawTrip.Fligth});
+              var variants = new List<Variant>();
+
+              if (rawTrip.Variants != null)
+              {
+                foreach (var variant in rawTrip.Variants.Variant)
+                {
+                  var segments = new List<Segment>();
+                  foreach (var segment in variant.Segment)
+                  {
+                    segments.Add(new Segment{MarketingSupplier = segment.MarketingSupplier, OperatingSupplier = segment.OperatingSupplier});
+
+                  }
+                  variants.Add(new Variant{Segments = segments});                  
+                } 
+              }
+                trips.Add(new Models.TripModel
+                {
+                  Supplier = rawTrip.Supplier, 
+                  Fligth = rawTrip.Fligth,
+                  Variants = variants
+                });
             }
             return trips;
         }

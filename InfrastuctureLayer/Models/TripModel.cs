@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace InfrastuctureLayer.Models
 {
@@ -7,9 +9,12 @@ namespace InfrastuctureLayer.Models
         public string Supplier { get; set; }
         public string Fligth { get; set; }
 
+        public List<Variant> Variants;
+        
         public override string ToString()
         {
-            return $"Trip: {Supplier} --> {Fligth}";
+            var result = $"Trip: {Supplier} --> {Fligth}\n";
+            return Variants.Aggregate(result, (current, variant) => current + $"{variant}\n");
         }
 
         public override bool Equals(object? obj)
