@@ -68,5 +68,30 @@ namespace InfrastuctureLayer.Gds.Sirena
             }
             return trips;
         }
+
+        public Fareremark TripFareRules()
+        {
+         var response = @"
+                <fareremark>
+                  <remark new_fare='true'>some text 1</remark>
+                  <remark new_fare='true'>some text 2</remark>
+                  <remark new_fare='true'>some text 3</remark>
+                  <remark new_fare='true'>some text 4</remark>
+           </fareremark>
+            ";
+            var serializer = new XmlSerializer(typeof(GdsModels.FareRemarkResponseModel.Fareremark));
+            var rawFareRemark = (GdsModels.FareRemarkResponseModel.Fareremark) serializer.Deserialize(new StringReader(response));
+            var remarks = new List<Models.Remark>();
+            foreach (var rawRemark in rawFareRemark.Remark)
+            {
+                remarks.Add(new Remark
+                {
+                  IsNewFare = (rawRemark.NewFare == "true"),
+                  Value = rawRemark.Text
+                });
+            }
+            
+            return new Fareremark{Remarks = remarks};
+        }
     }
 }

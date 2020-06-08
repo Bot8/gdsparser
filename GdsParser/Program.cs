@@ -9,11 +9,14 @@ namespace GdsParser
         static void Main(string[] args)
         {
             var trips = new Driver().Trips();
+            var fareRemark = new Driver().TripFareRules();
 
             foreach (var trip in trips)
             {
                 Console.WriteLine($"{trip}");    
             }
+            Console.WriteLine($"{fareRemark}");    
+
             var options = new JsonSerializerOptions
             {
                 WriteIndented = true
