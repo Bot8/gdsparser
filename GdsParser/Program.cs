@@ -13,15 +13,17 @@ namespace GdsParser
 
             foreach (var trip in trips)
             {
-                Console.WriteLine($"{trip}");    
+                Console.WriteLine($"{trip}");
             }
-            Console.WriteLine($"{fareRemark}");    
+
+            Console.WriteLine($"{fareRemark}");
 
             var options = new JsonSerializerOptions
             {
                 WriteIndented = true
             };
             Console.WriteLine(JsonSerializer.Serialize(trips, options));
+            Console.WriteLine(JsonSerializer.Serialize(fareRemark, options));
         }
     }
 }

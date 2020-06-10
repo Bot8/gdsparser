@@ -5,7 +5,7 @@ namespace InfrastuctureLayer.Models
     public class Fareremark
     {
         public List<Remark> Remarks;
-        
+
         public override string ToString()
         {
             var result = "";

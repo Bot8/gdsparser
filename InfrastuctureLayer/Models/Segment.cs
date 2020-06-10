@@ -11,7 +11,7 @@ namespace InfrastuctureLayer.Models
 
         public override string ToString()
         {
-            return $"operating_supplier -> {OperatingSupplier};\nmarketing_supplier -> {MarketingSupplier}";
+            return $"\nSegment:\noperating_supplier -> {OperatingSupplier};\nmarketing_supplier -> {MarketingSupplier}";
         }
 
         public override bool Equals(object? obj)

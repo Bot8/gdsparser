@@ -1,13 +1,34 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Xml.Serialization;
+using AutoMapper;
+using InfrastuctureLayer.GdsModels;
 using InfrastuctureLayer.Models;
 
 namespace InfrastuctureLayer.Gds.Sirena
 {
     public class Driver
     {
-        public List<Models.TripModel> Trips()
+        private readonly IMapper _mapper;
+
+        public Driver()
+        {
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<TripsResponseModel.Segment, Segment>();
+                cfg.CreateMap<TripsResponseModel.Variant, Variant>();
+                cfg.CreateMap<TripsResponseModel.Trip, TripModel>()
+                    .ForMember(
+                        d => d.Variants,
+                        opt => opt.MapFrom(src => src.Variants.Variant)
+                    );
+                cfg.CreateMap<FareRemarkResponseModel.Fareremark, Fareremark>();
+            });
+
+            _mapper = config.CreateMapper();
+        }
+
+        public List<TripModel> Trips()
         {
             var response = @"
                 <Trips>
@@ -39,59 +60,42 @@ namespace InfrastuctureLayer.Gds.Sirena
                   </Trip>
                 </Trips>
             ";
-            var serializer = new XmlSerializer(typeof(GdsModels.TripsResponseModel.Trips));
-            var rawTrips = (GdsModels.TripsResponseModel.Trips) serializer.Deserialize(new StringReader(response));
-            var trips = new List<Models.TripModel>();
+            var serializer = new XmlSerializer(typeof(TripsResponseModel.Trips));
+            var rawTrips = (TripsResponseModel.Trips) serializer.Deserialize(new StringReader(response));
+            var trips = new List<TripModel>();
             foreach (var rawTrip in rawTrips.Trip)
             {
-              var variants = new List<Variant>();
-
-              if (rawTrip.Variants != null)
-              {
-                foreach (var variant in rawTrip.Variants.Variant)
-                {
-                  var segments = new List<Segment>();
-                  foreach (var segment in variant.Segment)
-                  {
-                    segments.Add(new Segment{MarketingSupplier = segment.MarketingSupplier, OperatingSupplier = segment.OperatingSupplier});
-
-                  }
-                  variants.Add(new Variant{Segments = segments});                  
-                } 
-              }
-                trips.Add(new Models.TripModel
-                {
-                  Supplier = rawTrip.Supplier, 
-                  Fligth = rawTrip.Fligth,
-                  Variants = variants
-                });
+                trips.Add(_mapper.Map<TripModel>(rawTrip));
             }
+
             return trips;
         }
 
         public Fareremark TripFareRules()
         {
-         var response = @"
+            var response = @"
                 <fareremark>
                   <remark new_fare='true'>some text 1</remark>
                   <remark new_fare='true'>some text 2</remark>
                   <remark new_fare='true'>some text 3</remark>
                   <remark new_fare='true'>some text 4</remark>
-           </fareremark>
+                </fareremark>
             ";
-            var serializer = new XmlSerializer(typeof(GdsModels.FareRemarkResponseModel.Fareremark));
-            var rawFareRemark = (GdsModels.FareRemarkResponseModel.Fareremark) serializer.Deserialize(new StringReader(response));
-            var remarks = new List<Models.Remark>();
+            var serializer = new XmlSerializer(typeof(FareRemarkResponseModel.Fareremark));
+            var rawFareRemark =
+                (FareRemarkResponseModel.Fareremark) serializer.Deserialize(new StringReader(response));
+            
+            var remarks = new List<Remark>();
             foreach (var rawRemark in rawFareRemark.Remark)
             {
                 remarks.Add(new Remark
                 {
-                  IsNewFare = (rawRemark.NewFare == "true"),
-                  Value = rawRemark.Text
+                    IsNewFare = (rawRemark.NewFare == "true"),
+                    Value = rawRemark.Text
                 });
             }
-            
-            return new Fareremark{Remarks = remarks};
+
+            return new Fareremark {Remarks = remarks};
         }
     }
 }
