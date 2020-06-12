@@ -22,7 +22,21 @@ namespace InfrastuctureLayer.Gds.Sirena
                         d => d.Variants,
                         opt => opt.MapFrom(src => src.Variants.Variant)
                     );
-                cfg.CreateMap<FareRemarkResponseModel.Fareremark, Fareremark>();
+                cfg.CreateMap<FareRemarkResponseModel.Remark, Remark>()
+                    .ForMember(
+                        d => d.IsNewFare,
+                        opt => opt.MapFrom(src => src.NewFare == "true")
+                    )
+                    .ForMember(
+                        d => d.Value,
+                        opt => opt.MapFrom(src => src.Text)
+                    );
+
+                cfg.CreateMap<FareRemarkResponseModel.Fareremark, Fareremark>()
+                    .ForMember(
+                        d => d.Remarks,
+                        opt => opt.MapFrom(src => src.Remark)
+                    );
             });
 
             _mapper = config.CreateMapper();
@@ -84,18 +98,8 @@ namespace InfrastuctureLayer.Gds.Sirena
             var serializer = new XmlSerializer(typeof(FareRemarkResponseModel.Fareremark));
             var rawFareRemark =
                 (FareRemarkResponseModel.Fareremark) serializer.Deserialize(new StringReader(response));
-            
-            var remarks = new List<Remark>();
-            foreach (var rawRemark in rawFareRemark.Remark)
-            {
-                remarks.Add(new Remark
-                {
-                    IsNewFare = (rawRemark.NewFare == "true"),
-                    Value = rawRemark.Text
-                });
-            }
 
-            return new Fareremark {Remarks = remarks};
+            return _mapper.Map<Fareremark>(rawFareRemark);
         }
     }
 }

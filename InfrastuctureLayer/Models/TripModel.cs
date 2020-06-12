@@ -17,26 +17,17 @@ namespace InfrastuctureLayer.Models
             return Variants.Aggregate(result, (current, variant) => current + $"\n{variant}");
         }
 
-        public override bool Equals(object? obj)
+        protected bool Equals(TripModel other)
         {
-            if (obj is null)
-            {
-                return false;
-            }
+            return Equals(Variants, other.Variants) && Supplier == other.Supplier && Fligth == other.Fligth;
+        }
 
-            var trip = (TripModel) obj;
-
-            if (trip.Fligth != Fligth)
-            {
-                return false;
-            }
-
-            if (trip.Supplier != Supplier)
-            {
-                return false;
-            }
-
-            return true;
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((TripModel) obj);
         }
     }
 }
