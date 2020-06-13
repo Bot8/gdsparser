@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Xml.Serialization;
 using AutoMapper;
 using InfrastuctureLayer.GdsModels;
@@ -85,7 +86,7 @@ namespace InfrastuctureLayer.Gds.Sirena
             return trips;
         }
 
-        public Fareremark TripFareRules()
+        public string TripFareRules()
         {
             var response = @"
                 <fareremark>
@@ -99,7 +100,9 @@ namespace InfrastuctureLayer.Gds.Sirena
             var rawFareRemark =
                 (FareRemarkResponseModel.Fareremark) serializer.Deserialize(new StringReader(response));
 
-            return _mapper.Map<Fareremark>(rawFareRemark);
+             var fareremark = _mapper.Map<Fareremark>(rawFareRemark);
+
+             return fareremark.Remarks.Aggregate("", (current, remark) => current + remark + " ");
         }
     }
 }
