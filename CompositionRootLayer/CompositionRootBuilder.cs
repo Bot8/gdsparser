@@ -6,14 +6,18 @@ namespace CompositionRootLayer
 {
     public class CompositionRootBuilder
     {
-        public static ServiceProvider Build()
+        public static ServiceProvider BuildServiceProvider()
         {
             var serviceCollection = new ServiceCollection();
+            BindServices(serviceCollection);
+            return serviceCollection.BuildServiceProvider();
+        }
+
+        public static void BindServices(IServiceCollection serviceCollection)
+        {
             serviceCollection.AddTransient<Logger>();
             serviceCollection.AddTransient<Client>();
             serviceCollection.AddTransient<Driver>();
-
-            return serviceCollection.BuildServiceProvider();
         }
     }
 }

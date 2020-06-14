@@ -8,7 +8,7 @@ namespace GdsParser
     {
         public static void Main(string[] args)
         {
-            var serviceProvider = CompositionRootLayer.CompositionRootBuilder.Build();
+            var serviceProvider = CompositionRootLayer.CompositionRootBuilder.BuildServiceProvider();
             var driver = (Driver)serviceProvider.GetService(typeof(Driver));
             
             var trips = driver.Trips();

@@ -11,7 +11,7 @@ namespace InfstructureLayerTests
 
         public DriverTest()
         {
-            _driver = (Driver) CompositionRootLayer.CompositionRootBuilder.Build().GetService(typeof(Driver));
+            _driver = (Driver) CompositionRootLayer.CompositionRootBuilder.BuildServiceProvider().GetService(typeof(Driver));
         }
 
         [Fact]
@@ -26,18 +26,28 @@ namespace InfstructureLayerTests
 
             var variants = new List<Variant>();
             var segments1 = new List<Segment>();
-            segments1.Add(new Segment{OperatingSupplier = "SU", MarketingSupplier = "S7"});
-            segments1.Add(new Segment{OperatingSupplier = "SU", MarketingSupplier = "S7"});
-            variants.Add(new Variant{Segments = segments1});     
-            
+            segments1.Add(new Segment {OperatingSupplier = "SU", MarketingSupplier = "S7"});
+            segments1.Add(new Segment {OperatingSupplier = "SU", MarketingSupplier = "S7"});
+            variants.Add(new Variant {Segments = segments1});
+
             var segments2 = (new List<Segment>());
-            segments2.Add(new Segment{OperatingSupplier = "AA", MarketingSupplier = "BB"});
-            segments2.Add(new Segment{OperatingSupplier = "AA", MarketingSupplier = "BB"});
-            variants.Add(new Variant{Segments = segments2});
+            segments2.Add(new Segment {OperatingSupplier = "AA", MarketingSupplier = "BB"});
+            segments2.Add(new Segment {OperatingSupplier = "AA", MarketingSupplier = "BB"});
+            variants.Add(new Variant {Segments = segments2});
 
             expectedTrips.Add(new TripModel {Supplier = "XX", Fligth = "20", Variants = variants});
 
             Assert.Equal(expectedTrips, trips);
+        }
+        
+        [Fact]
+        public void TestTripFareRules()
+        {
+            var expectedRules =
+                "Remark -> some text 1 IsNewFare -> True Remark -> some text 2 IsNewFare -> True Remark -> some text 3 IsNewFare -> True Remark -> some text 4 IsNewFare -> True ";
+            var rules = _driver.TripFareRules();
+            
+            Assert.Equal(expectedRules, rules);
         }
     }
 }
