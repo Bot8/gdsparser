@@ -14,26 +14,22 @@ namespace InfrastuctureLayer.Models
             return $"\nSegment:\noperating_supplier -> {OperatingSupplier};\nmarketing_supplier -> {MarketingSupplier}";
         }
 
-        public override bool Equals(object? obj)
+        protected bool Equals(Segment other)
         {
-            if (null == obj)
-            {
-                return false;
-            }
+            return OperatingSupplier == other.OperatingSupplier && MarketingSupplier == other.MarketingSupplier;
+        }
 
-            var segment = (Segment) obj;
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((Segment) obj);
+        }
 
-            if (OperatingSupplier != segment.OperatingSupplier)
-            {
-                return false;
-            }
-
-            if (MarketingSupplier != segment.MarketingSupplier)
-            {
-                return false;
-            }
-
-            return true;
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(OperatingSupplier, MarketingSupplier);
         }
     }
 }

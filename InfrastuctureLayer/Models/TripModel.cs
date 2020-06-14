@@ -11,6 +11,11 @@ namespace InfrastuctureLayer.Models
 
         public List<Variant> Variants;
 
+        public TripModel()
+        {
+            Variants = new List<Variant>();
+        }
+
         public override string ToString()
         {
             var result = $"Trip: {Supplier} --> {Fligth}\n";
@@ -19,7 +24,9 @@ namespace InfrastuctureLayer.Models
 
         protected bool Equals(TripModel other)
         {
-            return Equals(Variants, other.Variants) && Supplier == other.Supplier && Fligth == other.Fligth;
+            var variantsEquals = (0 == Variants.Count && 0 == other.Variants.Count) ||
+                                 Variants.SequenceEqual(other.Variants);
+            return variantsEquals && Supplier == other.Supplier && Fligth == other.Fligth;
         }
 
         public override bool Equals(object obj)

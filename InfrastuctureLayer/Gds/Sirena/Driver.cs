@@ -8,11 +8,39 @@ using InfrastuctureLayer.Models;
 
 namespace InfrastuctureLayer.Gds.Sirena
 {
-    public class Driver
+    public class Driver: IDriver
     {
+        private readonly Client _client;
         private readonly IMapper _mapper;
 
-        public Driver()
+        public Driver(Client client)
+        {
+            _client = client;
+            _mapper = CreateMapper();
+        }
+
+        public List<TripModel> Trips()
+        {
+            var response = _client.Request(RequestName.Trips);
+            var serializer = new XmlSerializer(typeof(TripsResponseModel.Trips));
+            var rawTrips = (TripsResponseModel.Trips) serializer.Deserialize(new StringReader(response));
+
+            return rawTrips.Trip.Select(rawTrip => _mapper.Map<TripModel>(rawTrip)).ToList();
+        }
+
+        public string TripFareRules()
+        {
+            var response = _client.Request(RequestName.FareRules);
+            var serializer = new XmlSerializer(typeof(FareRemarkResponseModel.Fareremark));
+            var rawFareRemark =
+                (FareRemarkResponseModel.Fareremark) serializer.Deserialize(new StringReader(response));
+
+            var fareremark = _mapper.Map<Fareremark>(rawFareRemark);
+
+            return fareremark.Remarks.Aggregate("", (current, remark) => current + remark + " ");
+        }
+
+        private static IMapper CreateMapper()
         {
             var config = new MapperConfiguration(cfg =>
             {
@@ -40,69 +68,7 @@ namespace InfrastuctureLayer.Gds.Sirena
                     );
             });
 
-            _mapper = config.CreateMapper();
-        }
-
-        public List<TripModel> Trips()
-        {
-            var response = @"
-                <Trips>
-                  <Trip>
-                    <Supplier>SU</Supplier>
-                    <Fligth>10</Fligth>
-                  </Trip>
-                  <Trip>
-                    <Supplier>S7</Supplier>
-                    <Fligth>11</Fligth>
-                  </Trip>
-                  <Trip>
-                    <Supplier>N4</Supplier>
-                    <Fligth>15</Fligth>
-                  </Trip>
-                  <Trip>
-                    <Supplier>XX</Supplier>
-                    <Fligth>20</Fligth>
-                    <variants>
-                      <variant>
-                        <segment operating_supplier='SU' marketing_supplier='S7'></segment>
-                        <segment operating_supplier='SU' marketing_supplier='S7'></segment>
-                      </variant>
-                      <variant>
-                        <segment operating_supplier='AA' marketing_supplier='BB'></segment>
-                        <segment operating_supplier='AA' marketing_supplier='BB'></segment>
-                      </variant>
-                    </variants>
-                  </Trip>
-                </Trips>
-            ";
-            var serializer = new XmlSerializer(typeof(TripsResponseModel.Trips));
-            var rawTrips = (TripsResponseModel.Trips) serializer.Deserialize(new StringReader(response));
-            var trips = new List<TripModel>();
-            foreach (var rawTrip in rawTrips.Trip)
-            {
-                trips.Add(_mapper.Map<TripModel>(rawTrip));
-            }
-
-            return trips;
-        }
-
-        public string TripFareRules()
-        {
-            var response = @"
-                <fareremark>
-                  <remark new_fare='true'>some text 1</remark>
-                  <remark new_fare='true'>some text 2</remark>
-                  <remark new_fare='true'>some text 3</remark>
-                  <remark new_fare='true'>some text 4</remark>
-                </fareremark>
-            ";
-            var serializer = new XmlSerializer(typeof(FareRemarkResponseModel.Fareremark));
-            var rawFareRemark =
-                (FareRemarkResponseModel.Fareremark) serializer.Deserialize(new StringReader(response));
-
-             var fareremark = _mapper.Map<Fareremark>(rawFareRemark);
-
-             return fareremark.Remarks.Aggregate("", (current, remark) => current + remark + " ");
+            return config.CreateMapper();
         }
     }
 }
