@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Xml.Serialization;
 
-namespace InfrastuctureLayer.GdsModels
+namespace InfrastuctureLayer.Gds.Sirena.Models
 {
     public class FareRemarkResponseModel
     {

@@ -1,5 +1,4 @@
 ﻿using InfrastuctureLayer;
-using InfrastuctureLayer.Gds.Sirena;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace CompositionRootLayer
@@ -16,8 +15,10 @@ namespace CompositionRootLayer
         public static void BindServices(IServiceCollection serviceCollection)
         {
             serviceCollection.AddTransient<Logger>();
-            serviceCollection.AddTransient<Client>();
-            serviceCollection.AddTransient<Driver>();
+            serviceCollection.AddTransient<InfrastuctureLayer.Gds.Sirena.Client>();
+            serviceCollection.AddTransient<InfrastuctureLayer.Gds.Sirena.Driver>();
+            serviceCollection.AddTransient<InfrastuctureLayer.Gds.Ctrip.Client>();
+            serviceCollection.AddTransient<InfrastuctureLayer.Gds.Ctrip.Driver>();
         }
     }
 }

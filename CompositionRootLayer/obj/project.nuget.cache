@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "Ukcg/iSn8x62cAz+z2VPe/hWzgPIQ8pD7JNRMcDufl/Sk3F+arj5HeU72MPL7ia33A1dytyUtSQVY/rnKYE71A==",
+  "dgSpecHash": "I6fpgToIkhqG4gtfIug4yQyxvq+RR1uHcmkQ0PunBOf5YxeP1F44IFIXP3I+0TOiIZdS5O/j5e8D/kHAw01EHA==",
   "success": true,
   "projectFilePath": "/home/artarn/projects/sharp/gdsparser/CompositionRootLayer/CompositionRootLayer.csproj",
   "expectedPackageFiles": [
@@ -10,6 +10,7 @@
     "/home/artarn/.nuget/packages/microsoft.extensions.dependencyinjection.abstractions/3.1.4/microsoft.extensions.dependencyinjection.abstractions.3.1.4.nupkg.sha512",
     "/home/artarn/.nuget/packages/microsoft.netcore.platforms/1.1.0/microsoft.netcore.platforms.1.1.0.nupkg.sha512",
     "/home/artarn/.nuget/packages/microsoft.netcore.targets/1.1.0/microsoft.netcore.targets.1.1.0.nupkg.sha512",
+    "/home/artarn/.nuget/packages/newtonsoft.json/12.0.3/newtonsoft.json.12.0.3.nupkg.sha512",
     "/home/artarn/.nuget/packages/system.io/4.3.0/system.io.4.3.0.nupkg.sha512",
     "/home/artarn/.nuget/packages/system.reflection/4.3.0/system.reflection.4.3.0.nupkg.sha512",
     "/home/artarn/.nuget/packages/system.reflection.emit/4.3.0/system.reflection.emit.4.3.0.nupkg.sha512",

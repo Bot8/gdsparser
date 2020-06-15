@@ -3,7 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Xml.Serialization;
 using AutoMapper;
-using InfrastuctureLayer.GdsModels;
+using InfrastuctureLayer.Gds.Sirena.Models;
 using InfrastuctureLayer.Models;
 
 namespace InfrastuctureLayer.Gds.Sirena
@@ -44,28 +44,7 @@ namespace InfrastuctureLayer.Gds.Sirena
         {
             var config = new MapperConfiguration(cfg =>
             {
-                cfg.CreateMap<TripsResponseModel.Segment, Segment>();
-                cfg.CreateMap<TripsResponseModel.Variant, Variant>();
-                cfg.CreateMap<TripsResponseModel.Trip, TripModel>()
-                    .ForMember(
-                        d => d.Variants,
-                        opt => opt.MapFrom(src => src.Variants.Variant)
-                    );
-                cfg.CreateMap<FareRemarkResponseModel.Remark, Remark>()
-                    .ForMember(
-                        d => d.IsNewFare,
-                        opt => opt.MapFrom(src => src.NewFare == "true")
-                    )
-                    .ForMember(
-                        d => d.Value,
-                        opt => opt.MapFrom(src => src.Text)
-                    );
-
-                cfg.CreateMap<FareRemarkResponseModel.Fareremark, Fareremark>()
-                    .ForMember(
-                        d => d.Remarks,
-                        opt => opt.MapFrom(src => src.Remark)
-                    );
+                cfg.AddProfile<AutoMapperProfile>();
             });
 
             return config.CreateMapper();

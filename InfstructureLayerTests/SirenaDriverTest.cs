@@ -5,13 +5,14 @@ using Xunit;
 
 namespace InfstructureLayerTests
 {
-    public class DriverTest
+    public class SirenaDriverTest
     {
         private readonly Driver _driver;
 
-        public DriverTest()
+        public SirenaDriverTest()
         {
-            _driver = (Driver) CompositionRootLayer.CompositionRootBuilder.BuildServiceProvider().GetService(typeof(Driver));
+            _driver = (Driver) CompositionRootLayer.CompositionRootBuilder.BuildServiceProvider()
+                .GetService(typeof(Driver));
         }
 
         [Fact]
@@ -39,14 +40,14 @@ namespace InfstructureLayerTests
 
             Assert.Equal(expectedTrips, trips);
         }
-        
+
         [Fact]
         public void TestTripFareRules()
         {
             var expectedRules =
                 "Remark -> some text 1 IsNewFare -> True Remark -> some text 2 IsNewFare -> True Remark -> some text 3 IsNewFare -> True Remark -> some text 4 IsNewFare -> True ";
             var rules = _driver.TripFareRules();
-            
+
             Assert.Equal(expectedRules, rules);
         }
     }
