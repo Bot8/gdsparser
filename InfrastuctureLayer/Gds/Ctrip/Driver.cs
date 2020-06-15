@@ -12,10 +12,10 @@ namespace InfrastuctureLayer.Gds.Ctrip
         private readonly Client _client;
         private readonly IMapper _mapper;
 
-        public Driver(Client client)
+        public Driver(Client client, IMapper mapper)
         {
             _client = client;
-            _mapper = CreateMapper();
+            _mapper = mapper;
         }
 
         public List<TripModel> Trips()
@@ -34,13 +34,6 @@ namespace InfrastuctureLayer.Gds.Ctrip
             var fareremark = _mapper.Map<Fareremark>(rawFareConditions);
 
             return fareremark.Remarks.Aggregate("", (current, remark) => current + remark + " ");
-        }
-
-        private static IMapper CreateMapper()
-        {
-            var config = new MapperConfiguration(cfg => { cfg.AddProfile<AutoMapperProfile>(); });
-
-            return config.CreateMapper();
         }
     }
 }

@@ -17,7 +17,6 @@ namespace InfrastuctureLayer.Gds.Ctrip
                 opt => opt.MapFrom(src => src.FareConditions)
             );
             CreateMap<string, Remark>().ConvertUsing<RemarkTypeConverter>();
-            
         }
     }
 
