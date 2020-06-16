@@ -1,5 +1,5 @@
 ﻿using System;
-using InfrastuctureLayer.Gds.Sirena;
+using InfrastuctureLayer.Gds;
 using Newtonsoft.Json;
 
 namespace GdsParser
@@ -9,7 +9,8 @@ namespace GdsParser
         public static void Main(string[] args)
         {
             var serviceProvider = CompositionRootLayer.CompositionRootBuilder.BuildServiceProvider();
-            var driver = (Driver)serviceProvider.GetService(typeof(Driver));
+            var gdsFactory = (GdsFactory)serviceProvider.GetService(typeof(GdsFactory));
+            var driver = gdsFactory.GetGdsDriver(GdsEnum.Ctrip);
             
             var trips = driver.Trips();
             var fareRemark = driver.TripFareRules();

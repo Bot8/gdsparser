@@ -1,5 +1,6 @@
 ﻿using CompositionRootLayer.Factory;
 using InfrastuctureLayer;
+using InfrastuctureLayer.Gds;
 using InfrastuctureLayer.Gds.Sirena;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -22,6 +23,7 @@ namespace CompositionRootLayer
             serviceCollection.AddTransient<InfrastuctureLayer.Gds.Ctrip.Client>();
             serviceCollection.AddTransient<InfrastuctureLayer.Gds.Ctrip.Driver>();
             serviceCollection.AddTransient(c => AutoMapperFactory.Create());
+            serviceCollection.AddTransient<GdsFactory>();
         }
     }
 }
